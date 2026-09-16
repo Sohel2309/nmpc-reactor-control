@@ -1,0 +1,121 @@
+# ============================================================================
+# Experiment configuration for the Van de Vusse CSTR NMPC study
+#
+# All numerical values are the standard "Klatt-Engell" Van de Vusse CSTR
+# benchmark parameters widely used in the nonlinear process-control
+# literature (e.g. Klatt & Engell, 1998; Chen, Kremling & Allgower, 1995).
+# They are SIMULATION parameters for a benchmark reactor, not measured data
+# from a real industrial unit. This is stated explicitly so results are
+# never mistaken for industrial validation.
+# ============================================================================
+
+plant:
+  # Pre-exponential (frequency) factors, h^-1 for k1/k2, L/(mol h) for k3
+  k10_ab: 1.287e+12      # A -> B
+  k10_bc: 1.287e+12      # B -> C
+  k10_ad: 9.043e+09      # 2A -> D
+  # Activation energies / R, K
+  EA_ab_R: 9758.3
+  EA_bc_R: 9758.3
+  EA_ad_R: 8560.0
+  # Reaction enthalpies, kJ/mol
+  dH_ab: 4.2
+  dH_bc: -11.0
+  dH_ad: -41.85
+  # Physical / thermal parameters
+  rho: 0.9342           # kg/L, reaction mixture density
+  Cp: 3.01              # kJ/(kg K), reaction mixture heat capacity
+  kw: 4032.0            # kJ/(h m^2 K), heat transfer coefficient x area basis
+  AR: 0.215             # m^2, heat exchange area
+  VR: 10.01             # L, reactor volume
+  mk: 5.0               # kg, coolant mass
+  CPK: 2.0              # kJ/(kg K), coolant heat capacity
+  cA0: 5.1              # mol/L, feed concentration of A
+  T_in: 130.0           # deg C, feed temperature
+
+# The internal (controller) model is a deliberately imperfect copy of the
+# plant. Nominal mismatch = 0 for the "matched" baseline studies; the
+# model-mismatch experiment perturbs these multipliers explicitly.
+internal_model_mismatch:
+  k10_ab_mult: 1.0
+  k10_bc_mult: 1.0
+  kw_mult: 1.0
+
+# Nominal steady operating point used to initialise all simulations.
+# This is a genuine fixed point of cstr_rhs(x, u, plant_params) -- verified
+# numerically with scipy.optimize.fsolve (residual < 1e-6, see
+# scripts/find_steady_state.py) -- chosen to leave headroom to
+# T_safe_max = 145 C so that upward setpoint changes can be exercised
+# without starting the reactor already at its safety limit.
+nominal_state:
+  cA: 1.18416679
+  cB: 0.87622369
+  T: 130.33411047
+  TK: 124.56629947
+
+nominal_input:
+  F: 14.19     # h^-1, dilution rate D = feed flow / reactor volume
+  Qk: -5000.0  # kJ/h, jacket heat duty (negative = net cooling)
+
+# Manipulated variable bounds and rate limits
+constraints:
+  F_min: 3.0
+  F_max: 35.0
+  Qk_min: -9000.0
+  Qk_max: 0.0
+  dF_max: 8.0        # h^-1 per control interval (rate limit)
+  dQk_max: 3000.0    # kJ/h per control interval (rate limit)
+  T_safe_max: 145.0  # deg C, hard safety ceiling on reactor temperature
+  cB_min: 0.0
+
+simulation:
+  dt_plant: 0.005     # h, integration step for the "true" plant (RK4)
+  dt_control: 0.05    # h, controller sampling interval (3 min)
+  t_final: 6.0         # h, total simulated horizon per scenario
+
+nmpc:
+  N_default: 10        # default prediction horizon (control intervals)
+  N_sweep: [5, 10, 15, 20]
+  w_cB: 80.0            # tracking weight on cB
+  w_T: 0.0              # (optional) direct temperature tracking weight
+  w_dF: 0.02            # move-suppression weight on delta F
+  w_dQk: 6.0e-6         # move-suppression weight on delta Qk (re-tuned; see
+                         # docs/mathematical_formulation.md "NMPC tuning")
+  w_slack: 2.0e+4        # penalty on soft safety-constraint slack
+  solver_max_iter: 500
+
+pid:
+  # PID acts on cB (measured) -> manipulates F (dilution rate).
+  # Tuned by simulation-based sweep against the Experiment-1 setpoint
+  # step (see docs/mathematical_formulation.md, "PID tuning") after an
+  # initial reaction-curve estimate proved too sluggish (tau_I too large
+  # gave multi-hour settling with steady-state offset persisting for
+  # several hours -- an unfair, badly tuned baseline is explicitly
+  # disallowed by this project's fair-comparison requirement).
+  Kc: 20.0
+  tau_I: 0.15   # h
+  tau_D: 0.01   # h
+  # Qk is held at the nominal steady value for the PID baseline
+  # (PID is single-loop on the primary CV, as is common industrial practice
+  # for a simple baseline; this is documented as a design decision).
+
+noise:
+  cB_std_low: 0.005     # mol/L measurement noise, "low noise" scenario
+  cB_std_high: 0.03     # mol/L measurement noise, "high noise" scenario
+  process_std_low: 0.0
+  process_std_high: 0.02
+
+random_seed: 42
+
+economics:
+  # Quadratic utility/energy cost coefficients used ONLY by the
+  # steady-state optimizer (src/steady_state_optimizer.py), so that the
+  # "economic optimum" is an interior point with genuine spare control
+  # authority rather than the actuator-saturated corner a pure
+  # "maximize cB" objective produces (see that module's docstring for
+  # why this matters for Experiment 3). Simulation-scale weights chosen
+  # by a small manual sweep to give an interior optimum close to the
+  # nominal operating point; not a claim about real utility/feedstock
+  # prices.
+  cooling_cost_weight: 2.0
+  feed_cost_weight: 0.3

@@ -1,0 +1,7 @@
+noise_level,meas_noise_std,process_noise_std,controller,IAE,RMSE,control_effort_F,n_T_violations
+none,0.0,0.0,PID,0.11354,0.04928,30.87,0
+none,0.0,0.0,NMPC,0.01547,0.02126,55.154,0
+low,0.005,0.0,PID,0.11562,0.04965,34.772,0
+low,0.005,0.0,NMPC,0.01553,0.02126,55.161,0
+high,0.03,0.02,PID,0.14849,0.06444,478.96,0
+high,0.03,0.02,NMPC,0.08057,0.03659,54.576,0

@@ -1,0 +1,171 @@
+{
+  "setpoint_tracking (Exp 1)": {
+    "name": "setpoint_tracking",
+    "t_final": 6.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        1.0,
+        1.02622369
+      ],
+      [
+        3.5,
+        0.77622369
+      ]
+    ],
+    "feed_disturbances": [],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "disturbance_rejection (Exp 2)": {
+    "name": "disturbance_rejection",
+    "t_final": 6.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ]
+    ],
+    "feed_disturbances": [
+      [
+        1.5,
+        {
+          "cA0": 5.864999999999999
+        }
+      ],
+      [
+        3.5,
+        {
+          "cA0": 5.864999999999999,
+          "T_in": 138.0
+        }
+      ]
+    ],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "constraint_mild (Exp 4)": {
+    "name": "constraint_inactive",
+    "t_final": 3.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        0.5,
+        0.95622369
+      ]
+    ],
+    "feed_disturbances": [],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "constraint_aggressive (Exp 4)": {
+    "name": "constraint_active",
+    "t_final": 3.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        0.5,
+        1.2262236899999999
+      ]
+    ],
+    "feed_disturbances": [
+      [
+        1.5,
+        {
+          "T_in": 140.0
+        }
+      ]
+    ],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "horizon_sweep (Exp 5)": {
+    "name": "horizon_sweep",
+    "t_final": 2.5,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        0.4,
+        1.07622369
+      ]
+    ],
+    "feed_disturbances": [],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "model_mismatch (Exp 7)": {
+    "name": "model_mismatch",
+    "t_final": 3.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        0.5,
+        1.02622369
+      ]
+    ],
+    "feed_disturbances": [
+      [
+        2.0,
+        {
+          "cA0": 5.61
+        }
+      ]
+    ],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  },
+  "computational_feasibility (Exp 8)": {
+    "name": "computational_feasibility",
+    "t_final": 6.0,
+    "setpoint_changes": [
+      [
+        0.0,
+        0.87622369
+      ],
+      [
+        1.0,
+        1.02622369
+      ],
+      [
+        2.5,
+        0.77622369
+      ],
+      [
+        4.0,
+        1.12622369
+      ]
+    ],
+    "feed_disturbances": [
+      [
+        3.0,
+        {
+          "cA0": 5.61
+        }
+      ]
+    ],
+    "process_noise_std": 0.0,
+    "meas_noise_std": 0.005,
+    "seed": 42
+  }
+}

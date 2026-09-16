@@ -1,0 +1,2 @@
+N,control_interval_s,n_steps,mean_solve_ms,median_solve_ms,p95_solve_ms,max_solve_ms,n_solver_failures,worst_case_margin_x,feasible_realtime
+10,180.0,120,94.053,88.918,93.638,599.176,0,300.4,True

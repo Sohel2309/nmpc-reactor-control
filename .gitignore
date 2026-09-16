@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+.DS_Store
+
+# Results are committed intentionally in this repo (they are the actual
+# output of running the experiments and are referenced by the README/docs).
+# If you want a clean re-run, delete the contents of results/ manually:
+#   rm -rf results/plots/* results/tables/* results/raw/*

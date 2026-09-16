@@ -1,0 +1,3 @@
+controller,IAE,RMSE,n_T_violations,max_T_violation,final_cB,target_cB
+Open-loop (ss-opt input),0.45229,0.0957,88,7.962,0.743,0.887
+NMPC (closed loop),0.28941,0.05703,87,7.903,0.8356,0.887

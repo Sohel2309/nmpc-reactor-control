@@ -1,0 +1,3 @@
+scenario,IAE,max_T,n_T_violations,max_T_violation,max_slack_used,F_at_max_frac
+Mild (constraints inactive),0.0071,134.449,0,0.0,n/a (not logged per-step),0.0
+Aggressive (T constraint active),0.57747,143.184,0,0.0,n/a (not logged per-step),0.754
